@@ -1,0 +1,59 @@
+spring:
+    servlet:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
+    jackson:
+            serialization:
+                fail-on-empty-beans: false    # json 반환 오류 처리
+    output:
+        ansi:
+            enabled: always    # 콘솔
+
+    # 회원가입시 이메일 인증 설정
+    
+    # 소셜계정 회원가입 및 로그인 설정
+    
+    # 데이터베이스 (MySQL mealddang.db)
+    datasource:
+        url: "*****"
+        username: "*****"
+        password: "*****"
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    # DB connection 객체 만드는 애
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                '[show_sql]': true
+                '[format_sql]': true
+    
+    # View: Thymeleaf (1. 루트폴더 변경 2. 타임리프 캐시 설정 변경)
+    thymeleaf:
+        prefix: classpath:templates/
+        check-template-location: true
+        suffix: .html
+        mode: HTML
+        cache: false
+    # mustache:
+    #     prefix: classpath:templates/
+    #     check-template-location: true 
+    #     suffix: .html   # .html을 mustache 파일로 인식하겠다 (html 확장자가 사용 편리하니까~)
+    #     cache: false
+    # mvc:
+    #     static-path-pattern: /static/**
+
+logging:
+    level:
+        '[org.springframework.security]': DEBUG
+
+# 한글깨짐처리
+server:
+    servlet:
+        encoding:
+            charset: UTF-8
+            enabled: true
+            force: true
+
+

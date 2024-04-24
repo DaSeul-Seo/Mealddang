@@ -1,0 +1,26 @@
+<html layout:decorate="~{layout-inner}">
+    <main layout:fragment="content">
+
+        <div class="p-5 mb-4 bg-body-tertiary border rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold" th:text="${mdUser.nickname != null ? mdUser.nickname : mdUser.username} + '님 안녕하세요!'"></h1>
+                <p class="col-md-8 fs-4">원하는 서비스를 선택해보세요.</p>
+            </div>
+        </div>
+        <div class="row align-items-md-stretch">
+            <div class="col-md-6">
+                <div class="h-100 p-5 text-bg-dark rounded-3">
+                    <a th:href="@{/user/diet/log(startDate=${startDate})}">
+                        <h2>밀땅 일지</h2>
+                        <p>건강한 식단관리를 향해서</p>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="h-100 p-5 bg-body-tertiary border rounded-3">
+                    <a href="/user/rsrt/map"><h2>밀땅 검색</h2><p>내가 원하는 맛집을 찾아서</p></a>
+                </div>
+            </div>
+        </div>
+    </main>
+</html>

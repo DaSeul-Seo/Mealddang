@@ -1,0 +1,17 @@
+shape: sequence_diagram
+w : web
+c : controller
+처음이미지 등록{
+    w->c : post, jpg
+    w<-c : 200, origin_path
+
+}
+원본사진별결과페이지{
+    w->c : get, origin_path
+    w<-c : nut_results
+}
+
+일지 {
+    w->c : get
+    w<-c : mdUser, md_diet, monday, today, results, totalKcal, 
+}

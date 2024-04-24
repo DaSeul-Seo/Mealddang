@@ -1,0 +1,98 @@
+direction: right
+
+classes:{
+  Container: {
+    style{
+      stroke : transparent
+      # fill : transparent
+    }
+  }
+}
+
+User: {
+  shape: image
+  icon: https://icons.terrastruct.com/essentials%2F359-users.svg
+}
+
+AWS : {
+
+
+
+  style: {
+    stroke: blue
+    font-color: blue
+    stroke-dash: 3
+    fill: white
+  }
+
+  bridge: {
+    style: {
+      stroke: blue
+      font-color: blue
+      stroke-dash: 3
+      fill: white
+    }
+    _._.user -> c1.Nginx : Port 80
+
+    c1.Nginx ->  c2.Spring 
+    c2.Spring <-> c3.MySQL
+    
+    c2.Spring <-> c4.FastAPI
+
+    c1: Container{
+      class : Container
+      Nginx: {
+        shape: image
+        icon: https://icons.terrastruct.com/dev%2Fnginx.svg
+      }
+    }
+
+    c2 : Container {
+      class : Container
+
+      Spring: {
+          shape: image
+          icon: spring.svg
+    
+      }
+    }
+
+    c3 : Container {
+      class : Container
+      MySQL: {
+          shape: image
+          icon: https://icons.terrastruct.com/dev%2Fmysql.svg
+        }
+    }
+
+    c4 : Container {
+      class : Container
+      FastAPI{
+        shape: image
+        icon: fastapi.svg    
+      }
+    }
+  
+
+  
+  
+    
+
+  }
+}
+
+# GitHub : {
+#         shape: image
+#         icon:https://icons.terrastruct.com/dev%2Fgithub.svg
+#         # near: top-right
+# }
+
+# On-Premise : {
+#   style: {
+#     stroke: blue
+#     font-color: blue
+#     stroke-dash: 3
+#     fill: white
+#   }
+# }
+

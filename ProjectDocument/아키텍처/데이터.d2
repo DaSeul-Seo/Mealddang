@@ -1,0 +1,64 @@
+
+
+source : 식당 정보 {
+
+    k : 카카오 {
+        shape: sql_table
+        카카오아이디
+        식당이름
+        주소
+        etc\.\.\.
+    }
+    
+    n : 네이버 {
+        shape: sql_table
+        네이버아이디
+        식당이름
+        주소
+        etc\.\.\.
+    }
+    
+    o : 공공데이터{
+        shape: sql_table
+        공공데이터아이디
+        식당이름
+        주소
+        etc\.\.\.
+    }
+    
+}
+
+source -> mapping
+mapping -> source2
+
+
+mapping {
+    shape: sql_table
+    카카오아이디
+    네이버아이디
+    공공데이터아이디
+    식당이름
+    주소
+    etc\.\.\.
+
+}
+
+
+source2 : 리뷰 {
+
+    k : 카카오 {
+        shape: sql_table
+        카카오아이디
+        리뷰
+        etc\.\.\.
+    }
+    
+    n : 네이버 {
+        shape: sql_table
+        네이버아이디
+        리뷰
+        etc\.\.\.
+    }
+    
+    
+}

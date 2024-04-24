@@ -1,0 +1,112 @@
+<html layout:decorate="~{layout-inner}">
+    
+    <main  layout:fragment="content">
+    <!-- <div class="nemonemo"> -->
+        <div class="nemonemo">
+        <div class="text-center">
+        <h1  th:text="${mdUser.nickname != null ? mdUser.nickname : mdUser.username} + '님의 개인정보'"></h1>
+        </div>
+        <!-- <hr class="my-4"> -->
+        <div class="row">
+            <div class="main-container ">
+            <div class="col-12 my-4">
+                <form action="#" id="nickForm"  th:action="@{/user/mypage/update_nickname}" method="post" class="alertForm text-md-start">
+                    <label for="nickname">별명(Nickname)</label><br>
+                    <input type="text" name="nickname" th:attr="placeholder=${mdUser.nickname != null ? mdUser.nickname : 'none'}" required/>
+                    <button type="submit" class="btn btn-outline-warning">수정</button>
+                </form>
+            </div>
+            
+            <div class="col-sm-6 my-4">
+                <form action="#" id="birthForm" th:action="@{/user/mypage/update_birth}" method="post" class="alertForm text-md-start">
+                <label for="birth">출생년도(Birth Year)</label><br>
+                    <select name="birth" id="birth" required>
+                        <option value="" disabled selected>선택</option>
+                        <option th:each="year : ${#numbers.sequence(1980, 2023)}"
+                                th:value="${year}"
+                                th:text="${year}"
+                                th:selected="${year.toString() == mdUser.birth ? 'selected':null}">${year}</option>
+                    </select>
+                    <button type="submit" class="btn btn-outline-warning">수정</button>
+                </form>
+            </div>
+
+            <div class="col-sm-6 my-4">
+                <form action="#" id="genderForm"  th:action="@{/user/mypage/update_gender}" method="post" class="alertForm text-md-start">
+                    <label for="gender">성별(Gender)</label><br>
+                    <input type="radio" id="gender" name="gender" value="F" th:checked="${mdUser.gender == 'F' || mdUser.gender == null}" required/>여성
+                    <input type="radio" id="gender" name="gender" value="M" th:checked="${mdUser.gender == 'M'}" required/>남성                    
+                    <button type="submit" class="btn btn-outline-warning">수정</button>
+                </form>
+            </div>
+            
+            <div class="col-sm-6 my-4">
+                <form action="#" id="heightForm" th:action="@{/user/mypage/update_cm}" method="post">
+                    <label for="cm">키(cm)</label><br>
+                    <input type="text" id="cm" name="cm" th:attr="placeholder=${mdUser.userCm != null ? mdUser.userCm : 'none'}" required/>
+                    <button type="submit" onclick="checkInput()" class="btn btn-outline-warning">수정</button>
+                </form>
+            </div>
+
+            <div class="col-sm-6 my-4">
+                <form action="#" id="weightForm" th:action="@{/user/mypage/update_kg}" method="post">
+                    <label for="kg">몸무게(kg)</label><br>
+                    <input type="text" id="kg" name="kg" th:attr="placeholder=${mdUser.userKg != null ? mdUser.userKg : 'none'}" required/>
+                    <button type="submit" onclick="checkInput()" class="btn btn-outline-warning">수정</button>
+                </form>
+            </div>
+
+                <!-- <label>관심지역</label>
+                <label><input type="checkbox" th:field="*{userArea}" class="form-control" value="gangnam" />강남구</label>
+                <label><input type="checkbox" th:field="*{userArea}" class="form-control" value="seocho" />서초구</label>
+                <label><input type="checkbox" th:field="*{userArea}" class="form-control" value="jongro" />종로구</label>
+                <span th:if="${valid_userArea}" th:text="${valid_userArea}" id="valid"></span>
+
+                <label>관심키워드</label>
+                    <label>
+                        <input type="checkbox" th:field="*{userTag1}" class="form-control" value=1 />가격이_착한
+                    </label>
+                    <label>
+                        <input type="checkbox" th:field="*{userTag2}" class="form-control" value=1 />쾌적한
+                    </label>
+                    <label>
+                        <input type="checkbox" th:field="*{userTag3}" class="form-control" value="1"/>주차가능한
+                    </label>
+                <input type="submit" value="수정 완료"> -->
+        </div>
+    <!-- 입력 형식 검사 js -->
+    <script>
+        document.getElementById("heightForm").addEventListener("submit", function(event) {
+            var inputCm = document.getElementById('cm').value;
+            if (isNaN(inputCm) || inputCm.trim() === "") {
+                alert("올바른 형식이 아닙니다. 키를 숫자로 입력해주세요.");
+                event.preventDefault(); // 폼의 제출을 막습니다.
+            } else {
+                alert("키가 저장되었습니다.");
+            }
+        });
+        document.getElementById("weightForm").addEventListener("submit", function(event) {
+            var inputKg = document.getElementById('kg').value;
+            if (isNaN(inputKg) || inputKg.trim() === "") {
+                alert("올바른 형식이 아닙니다. 몸무게를 숫자로 입력해주세요.");
+                event.preventDefault(); // 폼의 제출을 막습니다.
+            } else {
+                alert("몸무게가 저장되었습니다.");
+            }
+        });
+    
+        document.addEventListener('DOMContentLoaded', function () {
+        var alertForms = document.querySelectorAll('.alertForm');
+        alertForms.forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                alert('저장되었습니다.');
+            });
+        });
+    });
+    </script>
+    </main>
+
+    </div>
+</div>
+    
+</html>

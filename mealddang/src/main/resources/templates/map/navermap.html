@@ -1,0 +1,428 @@
+<html layout:decorate="~{layout-inner}">
+    <main layout:fragment="content">
+
+        <!-- 검색창 section -->
+        <section id="search-box">
+            <div class="nemonemo">
+            <h2 class="title">🍽️ 식당 검색 🍽️</h2>
+            <form action="/user/rsrt/search/name" method="GET">
+                <input onkeyup="enterkey()" type="search" name="searchkey" placeholder="식당 이름 검색"/>
+                <button type="submit" class="btn btn-outline-warning">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
+        </section>
+
+        <!-- 검색 및 필터 결과 section -->
+        <section id="map-result">
+            <div class="searchresult" style="display: none;">
+                <div th:if="${(nameSearchResults == null || nameSearchResults.isEmpty()) && storeCnt == 0}">
+                    <span>0건의 결과를 찾았습니다.</span>
+                </div>
+                <div th:if="${!(nameSearchResults == null || nameSearchResults.isEmpty())}">
+                    <span th:text="${#lists.size(nameSearchResults)} + '건의 결과를 찾았습니다.'" style="display:inline-block;"></span>
+                </div>
+                <div th:if="${storeCnt > 0}">
+                    <span th:text="${storeCnt} + '건의 결과를 찾았습니다.'" style="display:inline-block;"></span>
+                </div>
+                
+                <!-- <table>
+                        <tbody class="searchResultTable">
+                            <tr th:id="${mdStore.storeId}" th:each="mdStore : ${nameSearchResults}" class="table-row">
+                                <td class="table-data" th:text="${mdStore.storeName != null ? mdStore.storeName : 'N/A'}" style="display: none;"></td>
+                                <td class="table-data" th:text="${mdStore.storeAddr != null ? mdStore.storeAddr : 'N/A'}" style="display: none;"></td>
+                            </tr>
+                        </tbody>
+                    </table> -->
+
+                <script>
+                    document.querySelector('.searchresult').style.display = 'block';
+                </script>
+            </div>
+        </section>
+
+        <!-- 키워드 카테고리 필터 section -->
+        <section id="category-filter">
+
+            <div class="category-container" style="margin-bottom: 20px;">
+                <h2 class="category-title" style="margin:20px 0;">💛 밀땅 카테고리를 선택해보세요 💛</h2>
+
+                <div class="category-list button-con">
+                    <button class="activebtn btn btn-outline-warning"style="margin-bottom: 10px;" id="atmosphereButton" data-value="분위기">🎻분위기</button>
+                    <script>
+                        document.getElementById("atmosphereButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("분위기"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="tasteButton" data-value="맛">👅맛있는</button>
+                    <script>
+                        document.getElementById("tasteButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("맛"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="cleanButton" data-value="깨끗">✨깔끔한</button>
+                    <script>
+                        document.getElementById("cleanButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("깨끗"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="cleanlinessButton" data-value="청결">🍴청결</button>
+                    <script>
+                        document.getElementById("cleanlinessButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("청결"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="bookButton"data-value="예약">📓예약가능</button>
+                    <script>
+                        document.getElementById("bookButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("예약"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="bigButton"data-value="대형">🕍대형매장</button>
+                    <script>
+                        document.getElementById("bigButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("대형"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="diningButton" data-value="회식">🕺회식</button>
+                    <script>
+                        document.getElementById("diningButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("회식"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+                    
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="notaloneButton" data-value="혼밥">🍚혼밥</button>
+                    <script>
+                        document.getElementById("notaloneButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("혼밥"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="dateButton" data-value="데이트">💖데이트</button>
+                    <script>
+                        document.getElementById("dateButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("데이트"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="familyButton" data-value="가족">🏠가족모임</button>
+                    <script>
+                        document.getElementById("familyButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("가족"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="groupButton" data-value="단체">🪑단체석</button>
+                    <script>
+                        document.getElementById("groupButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("단체"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="roomButton" data-value="룸">🚪룸</button>
+                    <script>
+                        document.getElementById("roomButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("룸"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="privateButton" data-value="프라이빗">🛋️프라이빗</button>
+                    <script>
+                        document.getElementById("privateButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("프라이빗"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;"id="parkButton" data-value="주차장">🅿️주차</button>
+                    <script>
+                        document.getElementById("parkButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("주차장"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="coolButton" data-value="콜키지프리">🍷콜키지프리</button>
+                    <script>
+                        document.getElementById("coolButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("콜키지프리"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="traditionButton" data-value="전통">🎋전통</button>
+                    <script>
+                        document.getElementById("traditionButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("전통"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="deliveryButton" data-value="배달">🚀배달</button>
+                    <script>
+                        document.getElementById("deliveryButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("배달"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="packagingButton" data-value="포장">👞포장</button>
+                    <script>
+                        document.getElementById("packagingButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("포장"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="dawnButton" data-value="새벽">🌅새벽</button>
+                    <script>
+                        document.getElementById("dawnButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("새벽"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="noholidayButton" data-value="연중무휴">🕣연중무휴</button>
+                    <script>
+                        document.getElementById("noholidayButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("연중무휴"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="petButton" data-value="반려동물">🐈반려동물</button>
+                    <script>
+                        document.getElementById("petButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("반려동물"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+
+                    <button class="activebtn btn btn-outline-warning" style="margin-bottom: 10px;" id="newButton" data-value="새로">💫새로오픈</button>
+                    <script>
+                        document.getElementById("newButton").addEventListener("click", function() {
+                            var keyword = encodeURIComponent("새로"); // URL에 사용될 수 있도록 키워드를 인코딩합니다.
+                            window.location.href = '/user/rsrt/filter/atmosphere?keyword=' + keyword;
+                        });
+                    </script>
+                </div>
+            </div>
+        </section>
+
+        <!-- 지도 section -->
+        <section id="map">
+            <div class="map-container">
+                <div class="map" style="width:70%; height:500px; right: -250px;"></div>
+
+                <!-- <div class="img-search"><h5>이미지 검색</h5></div> -->
+                
+                <!-- 챗봇 코드 추가
+                <div id="chatbot" style="position: fixed; bottom: 20px; right: 20px; width: 300px; height: 400px; border: 1px solid #ccc; background-color: #f9f9f9; overflow-y: auto;">
+                    <div id="chatbot-messages" style="padding: 10px;"></div>
+                    <input type="text" id="chatbot-input" style="width: 100%; padding: 5px; box-sizing: border-box; border: 1px solid #ccc;">
+                </div>
+                <script>
+                    // 챗봇 메시지를 추가하는 함수
+                    function addMessage(message, isUser) {
+                        var chatbotMessages = document.getElementById('chatbot-messages');
+                        var div = document.createElement('div');
+                        div.textContent = message;
+                        if (isUser) {
+                            div.style.textAlign = 'right';
+                            div.style.color = 'blue';
+                        }
+                        chatbotMessages.appendChild(div);
+                        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+                    }
+                
+                    // 챗봇 입력 이벤트 처리
+                    document.getElementById('chatbot-input').addEventListener('keypress', function(event) {
+                        if (event.key === 'Enter') {
+                            var input = event.target.value;
+                            addMessage('사용자: ' + input, true); // 사용자 입력 추가
+                            // 여기에 입력된 메시지에 따른 챗봇 응답을 추가하는 로직을 작성
+                            // 예를 들어, 사용자 입력이 '안녕'이면 챗봇이 '안녕하세요!'와 같은 응답을 생성하여 추가
+                            event.target.value = ''; // 입력 필드 초기화
+                        }
+                    });
+                </script> -->
+            </div>
+        </section>
+
+
+        <script th:inline="javascript">
+            var infowindow = new naver.maps.InfoWindow();
+
+            var nameSearchResults = /*[[${nameSearchResults}]]*/ {}; 
+            console.log(nameSearchResults);
+            var filteredStores = /*[[${filteredStores}]]*/ {}; 
+            console.log(filteredStores);
+
+            // 지도 생성
+            var map = new naver.maps.Map('map', {
+                center: new naver.maps.LatLng(37.498095, 127.027610), // 강남역 중심으로 하는 지도
+                zoom: 13
+            });
+
+            if (nameSearchResults){
+                // nameSearchResults에 대한 마커 생성
+                nameSearchResults.forEach(function(store) {
+                    var marker = new naver.maps.Marker({
+                        position: new naver.maps.LatLng(store.storeY, store.storeX),
+                        map: map
+                    });
+                    
+                    var contentString = [
+                        '<div class="iw_inner">',
+                        '   <h3>' + store.storeName + '</h3>',
+                        '   <p>' + store.storeAddr + '<br />',
+                        '       <img src="' + store.storeImgUrl + '" width="55" height="55" alt="' + store.storeName + '" class="thumb" /><br />',
+                        '       ' + store.storeTel + ' | <button class="btn btn-outline-warning" onclick="window.open(\'' + store.storeMenuUrlN + '\', \'_blank\')">메뉴 보기</button>',
+                        '   </p>',
+                        '</div>'
+                    ].join('');
+
+                    var infowindow = new naver.maps.InfoWindow({
+                        content: contentString,
+                        maxWidth: 300,
+                        backgroundColor: "lightyellow", // 연노랑색 배경
+                        borderColor: "#ffc107", // 노란색 테두리
+                        borderWidth: 3,
+                        anchorSize: new naver.maps.Size(30, 30),
+                        anchorSkew: true,
+                        anchorColor: "lightyellow", // 연노랑색 앵커
+                        pixelOffset: new naver.maps.Point(20, -20)
+                    });
+            
+                    naver.maps.Event.addListener(marker, 'click', function(e) {
+                        if (infowindow.getMap()) {
+                            infowindow.close();
+                        } else {
+                            infowindow.setContent(contentString);
+                            infowindow.open(map, marker);
+                        }
+                    });
+                });
+            }
+
+            if(filteredStores){
+                // filteredStores에 대한 마커 생성
+                filteredStores.forEach(function(store) {
+                    var marker = new naver.maps.Marker({
+                        position: new naver.maps.LatLng(store.storeY, store.storeX),
+                        map: map
+                    });
+                    
+                    var contentString = [
+                        '<div class="iw_inner">',
+                        '   <h3>' + store.storeName + '</h3>',
+                        '   <p>' + store.storeRoadAddressN + '<br />',
+                        '       <img src="' + store.storeImageUrl + '" width="55" height="55" alt="' + store.storeName + '" class="thumb" /><br />',
+                        '       ' + store.storePhone + ' | <button class="btn btn-outline-warning" onclick="window.open(\'' + store.storeMenuUrlN + '\', \'_blank\')">메뉴 보기</button>',
+                        '   </p>',
+                        '</div>'
+                    ].join('');
+
+                    var infowindow = new naver.maps.InfoWindow({
+                        content: contentString,
+                        maxWidth: 300,
+                        backgroundColor: "lightyellow", // 연노랑색 배경
+                        borderColor: "#ffc107", // 노란색 테두리
+                        borderWidth: 3,
+                        anchorSize: new naver.maps.Size(30, 30),
+                        anchorSkew: true,
+                        anchorColor: "lightyellow", // 연노랑색 앵커
+                        pixelOffset: new naver.maps.Point(20, -20)
+                    });
+                    // 정보 창 내용 설정 후 열기
+                    naver.maps.Event.addListener(marker, 'click', function(e) {
+                        if (infowindow.getMap()) {
+                            infowindow.close();
+                        } else {
+                            infowindow.setContent(contentString);
+                            infowindow.open(map, marker);
+                        }
+                    });
+                }); 
+                // 검색창 엔터키 이벤트
+                function enterkey() {
+                    if (window.event.keyCode == 13) {
+                        document.getElementById("searchForm").submit();
+                    }
+                    return false
+                }
+            }
+
+            //실시간 위치 업데이트
+            var currentMarker = null; // 현재 마커를 저장할 전역 변수
+            var lastPosition = null; // 마지막 위치를 저장할 전역 변수
+            var isFirstLocation = true; // 첫 번째 위치 확인인지 여부를 저장할 변수
+
+            setInterval(function() {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+            
+                // 새 위치와 마지막 위치를 비교
+                if (lastPosition && latitude === lastPosition.lat && longitude === lastPosition.lng) {
+                    // 위치가 변경되지 않았으면 아무것도 하지 않음
+                    return;
+                }
+
+                // 새 위치를 마지막 위치로 업데이트
+                lastPosition = { lat: latitude, lng: longitude };
+
+                // 이전 마커가 있으면 지도에서 제거
+                if (currentMarker) {
+                    currentMarker.setMap(null);
+                }
+
+                // var markerOptions = {
+                //     position: new naver.maps.LatLng(latitude, longitude),
+                //     map: map,
+                //     icon: {
+                //         content: '<img src="/static/icons/map-marker-icon_34392.png" style="width: 33px; height: 33px;">'
+                //     } // 빨간색 마커 이미지로 설정
+                // };
+
+                var markerOptions = {
+                    position: new naver.maps.LatLng(latitude, longitude),
+                    map: map,
+                    icon: {
+                        url: '/icons/map-marker-icon_34392.png', // 이미지의 경로를 설정합니다.
+                        size: new naver.maps.Size(33, 33), // 이미지의 크기를 설정합니다.
+                        scaledSize: new naver.maps.Size(33, 33) // 이미지의 크기를 화면에 표시될 크기로 조절합니다.
+                    }
+                };
+                var marker = new naver.maps.Marker(markerOptions);
+                
+                // 새로 생성된 마커를 현재 마커로 저장
+                currentMarker = marker;
+
+                // 첫 번째 위치 확인이거나 위치가 변경된 경우에만 지도의 중심을 현재 위치로 이동
+                if (isFirstLocation || (latitude !== lastPosition.lat || longitude !== lastPosition.lng)) {
+                    map.setCenter(markerOptions.position);
+                    isFirstLocation = false; // 첫 번째 위치 확인이 끝났으므로 false로 설정
+                }
+                });
+            }, 2000);
+        </script>
+
+    </main>
